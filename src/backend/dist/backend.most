@@ -1,0 +1,180 @@
+// Version: 1.0.0
+type AttendanceId__91187254 = Nat;
+type AttendanceRecord__699091857 =
+  {
+    date : Timestamp__301639476;
+    id : AttendanceId__91187254;
+    markedBy : Text;
+    status : AttendanceStatus__1021638340;
+    studentId : StudentId__585118929
+  };
+type AttendanceStatus__1021638340 = {#Absent; #Late; #Present};
+type Audience__778274878 = {#Admin; #All; #Class; #Student; #Teacher};
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type FeeId__630778756 = Nat;
+type FeeRecord__677125963 =
+  {
+    amount : Nat;
+    dueDate : Timestamp__301639476;
+    id : FeeId__630778756;
+    lateFeeAmount : Nat;
+    paidDate : ?Timestamp__301639476;
+    receiptNumber : Text;
+    status : FeeStatus__1058318181;
+    studentId : StudentId__585118929
+  };
+type FeeStatus__1058318181 = {#Late; #Paid; #Unpaid};
+type HomeworkId__511182437 = Nat;
+type HomeworkSubmission__808300015 =
+  {
+    homeworkId : HomeworkId__511182437;
+    status : SubmissionStatus__860030485;
+    studentId : StudentId__585118929;
+    submittedAt : Timestamp__301639476
+  };
+type Homework__75327718 =
+  {
+    classId : Text;
+    createdAt : Timestamp__301639476;
+    createdBy : Text;
+    description : Text;
+    dueDate : Timestamp__301639476;
+    id : HomeworkId__511182437;
+    title : Text
+  };
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type MarkId__454837853 = Nat;
+type Mark__983855505 =
+  {
+    assessmentName : Text;
+    date : Timestamp__301639476;
+    id : MarkId__454837853;
+    maxScore : Nat;
+    score : Nat;
+    studentId : StudentId__585118929;
+    subject : Text
+  };
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type NoticeId__539436524 = Nat;
+type Notice__313028600 =
+  {
+    audience : Audience__778274878;
+    classId : ?Text;
+    content : Text;
+    createdAt : Timestamp__301639476;
+    createdBy : Text;
+    id : NoticeId__539436524;
+    title : Text
+  };
+type Role__300349085 = {#Admin; #Student; #Teacher};
+type SessionInfo__291506173 =
+  {
+    createdAt : Timestamp__301639476;
+    name : Text;
+    role : Role__300349085;
+    roleId : Text;
+    username : Text
+  };
+type StudentId__585118929 = Nat;
+type Student__26715999 =
+  {
+    class_ : Text;
+    createdAt : Timestamp__301639476;
+    grNo : Text;
+    id : StudentId__585118929;
+    name : Text;
+    parentContact : Text;
+    photoUrl : Text;
+    section : Text
+  };
+type SubmissionStatus__860030485 = {#Pending; #Submitted};
+type TeacherId__977536047 = Nat;
+type Teacher__896081680 =
+  {
+    classesAssigned : [Text];
+    createdAt : Timestamp__301639476;
+    id : TeacherId__977536047;
+    name : Text;
+    subjects : [Text];
+    teacherId : Text
+  };
+type Timestamp__301639476 = Int;
+type UserProfile__129828592 =
+  {
+    createdAt : Timestamp__301639476;
+    id : Text;
+    name : Text;
+    role : Role__300349085;
+    roleId : Text;
+    username : Text
+  };
+actor {
+  stable attendanceRecords :
+    {
+      var root :
+        Node__46230540<AttendanceId__91187254, AttendanceRecord__699091857>;
+      var size : Nat__490723111
+    };
+  stable credentials :
+    {var root : Node__46230540<Text, Text>; var size : Nat__490723111};
+  stable fees :
+    {
+      var root : Node__46230540<FeeId__630778756, FeeRecord__677125963>;
+      var size : Nat__490723111
+    };
+  stable homeworks :
+    {
+      var root : Node__46230540<HomeworkId__511182437, Homework__75327718>;
+      var size : Nat__490723111
+    };
+  stable marks :
+    {
+      var root : Node__46230540<MarkId__454837853, Mark__983855505>;
+      var size : Nat__490723111
+    };
+  stable var nextAttendanceId : Nat;
+  stable var nextFeeId : Nat;
+  stable var nextHomeworkId : Nat;
+  stable var nextMarkId : Nat;
+  stable var nextNoticeId : Nat;
+  stable var nextStudentId : Nat;
+  stable var nextTeacherId : Nat;
+  stable notices :
+    {
+      var root : Node__46230540<NoticeId__539436524, Notice__313028600>;
+      var size : Nat__490723111
+    };
+  stable sessions :
+    {
+      var root : Node__46230540<Text, SessionInfo__291506173>;
+      var size : Nat__490723111
+    };
+  stable students :
+    {
+      var root : Node__46230540<StudentId__585118929, Student__26715999>;
+      var size : Nat__490723111
+    };
+  stable submissions :
+    {
+      var root :
+        Node__46230540<(HomeworkId__511182437, StudentId__585118929),
+                        HomeworkSubmission__808300015>;
+      var size : Nat__490723111
+    };
+  stable teachers :
+    {
+      var root : Node__46230540<TeacherId__977536047, Teacher__896081680>;
+      var size : Nat__490723111
+    };
+  stable userProfiles :
+    {
+      var root : Node__46230540<Text, UserProfile__129828592>;
+      var size : Nat__490723111
+    }
+};

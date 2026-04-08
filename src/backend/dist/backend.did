@@ -1,0 +1,307 @@
+type UserProfile = 
+ record {
+   createdAt: Timestamp;
+   id: text;
+   name: text;
+   role: Role;
+   roleId: text;
+   username: text;
+ };
+type UpdateTeacherInput = 
+ record {
+   classesAssigned: vec text;
+   id: TeacherId;
+   name: text;
+   subjects: vec text;
+   teacherId: text;
+ };
+type UpdateStudentInput = 
+ record {
+   class: text;
+   grNo: text;
+   id: StudentId;
+   name: text;
+   parentContact: text;
+   photoUrl: text;
+   section: text;
+ };
+type UpdateMarkInput = 
+ record {
+   assessmentName: text;
+   id: MarkId;
+   maxScore: nat;
+   score: nat;
+ };
+type UpdateFeeInput = 
+ record {
+   amount: nat;
+   dueDate: Timestamp;
+   id: FeeId;
+   lateFeeAmount: nat;
+   receiptNumber: text;
+   status: FeeStatus;
+ };
+type Timestamp = int;
+type TeacherId = nat;
+type Teacher = 
+ record {
+   classesAssigned: vec text;
+   createdAt: Timestamp;
+   id: TeacherId;
+   name: text;
+   subjects: vec text;
+   teacherId: text;
+ };
+type SubmissionStatus = 
+ variant {
+   Pending;
+   Submitted;
+ };
+type StudentId = nat;
+type Student = 
+ record {
+   class: text;
+   createdAt: Timestamp;
+   grNo: text;
+   id: StudentId;
+   name: text;
+   parentContact: text;
+   photoUrl: text;
+   section: text;
+ };
+type Role = 
+ variant {
+   Admin;
+   Student;
+   Teacher;
+ };
+type NoticeId = nat;
+type Notice = 
+ record {
+   audience: Audience;
+   classId: opt text;
+   content: text;
+   createdAt: Timestamp;
+   createdBy: text;
+   id: NoticeId;
+   title: text;
+ };
+type MarkId = nat;
+type MarkAttendanceInput = 
+ record {
+   date: Timestamp;
+   markedBy: text;
+   status: AttendanceStatus;
+   studentId: StudentId;
+ };
+type Mark = 
+ record {
+   assessmentName: text;
+   date: Timestamp;
+   id: MarkId;
+   maxScore: nat;
+   score: nat;
+   studentId: StudentId;
+   subject: text;
+ };
+type LoginResult = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type HomeworkSubmission = 
+ record {
+   homeworkId: HomeworkId;
+   status: SubmissionStatus;
+   studentId: StudentId;
+   submittedAt: Timestamp;
+ };
+type HomeworkId = nat;
+type Homework = 
+ record {
+   classId: text;
+   createdAt: Timestamp;
+   createdBy: text;
+   description: text;
+   dueDate: Timestamp;
+   id: HomeworkId;
+   title: text;
+ };
+type FeesCollectionSummary = 
+ record {
+   collectedAmount: nat;
+   lateAmount: nat;
+   pendingAmount: nat;
+   totalAmount: nat;
+ };
+type FeeStatus = 
+ variant {
+   Late;
+   Paid;
+   Unpaid;
+ };
+type FeeRecord = 
+ record {
+   amount: nat;
+   dueDate: Timestamp;
+   id: FeeId;
+   lateFeeAmount: nat;
+   paidDate: opt Timestamp;
+   receiptNumber: text;
+   status: FeeStatus;
+   studentId: StudentId;
+ };
+type FeeId = nat;
+type EnrollmentByClass = 
+ record {
+   classId: text;
+   studentCount: nat;
+ };
+type CreateTeacherInput = 
+ record {
+   classesAssigned: vec text;
+   name: text;
+   subjects: vec text;
+   teacherId: text;
+ };
+type CreateStudentInput = 
+ record {
+   class: text;
+   grNo: text;
+   name: text;
+   parentContact: text;
+   photoUrl: text;
+   section: text;
+ };
+type CreateNoticeInput = 
+ record {
+   audience: Audience;
+   classId: opt text;
+   content: text;
+   createdBy: text;
+   title: text;
+ };
+type CreateHomeworkInput = 
+ record {
+   classId: text;
+   createdBy: text;
+   description: text;
+   dueDate: Timestamp;
+   title: text;
+ };
+type CreateFeeInput = 
+ record {
+   amount: nat;
+   dueDate: Timestamp;
+   lateFeeAmount: nat;
+   receiptNumber: text;
+   studentId: StudentId;
+ };
+type Audience = 
+ variant {
+   Admin;
+   All;
+   Class;
+   Student;
+   Teacher;
+ };
+type AttendanceSummary = 
+ record {
+   absentDays: nat;
+   lateDays: nat;
+   presentDays: nat;
+   studentId: StudentId;
+   totalDays: nat;
+ };
+type AttendanceStatus = 
+ variant {
+   Absent;
+   Late;
+   Present;
+ };
+type AttendanceRecord = 
+ record {
+   date: Timestamp;
+   id: AttendanceId;
+   markedBy: text;
+   status: AttendanceStatus;
+   studentId: StudentId;
+ };
+type AttendanceRateSummary = 
+ record {
+   absentCount: nat;
+   attendanceRate: nat;
+   lateCount: nat;
+   presentCount: nat;
+   totalRecords: nat;
+ };
+type AttendanceId = nat;
+type AddUserResult = 
+ variant {
+   err: text;
+   ok: UserProfile;
+ };
+type AddUserInput = 
+ record {
+   name: text;
+   password: text;
+   roleId: text;
+   username: text;
+ };
+type AddMarkInput = 
+ record {
+   assessmentName: text;
+   date: Timestamp;
+   maxScore: nat;
+   score: nat;
+   studentId: StudentId;
+   subject: text;
+ };
+service : {
+  addMark: (token: text, input: AddMarkInput) -> (Mark);
+  addUser: (token: text, input: AddUserInput) -> (AddUserResult);
+  createFeeRecord: (token: text, input: CreateFeeInput) -> (FeeRecord);
+  createHomework: (token: text, input: CreateHomeworkInput) -> (Homework);
+  createNotice: (token: text, input: CreateNoticeInput) -> (Notice);
+  createStudent: (token: text, input: CreateStudentInput) -> (Student);
+  createTeacher: (token: text, input: CreateTeacherInput) -> (Teacher);
+  deleteNotice: (token: text, id: NoticeId) -> (bool);
+  deleteStudent: (token: text, id: StudentId) -> (bool);
+  deleteTeacher: (token: text, id: TeacherId) -> (bool);
+  getAttendanceByClass: (token: text, classId: text, date: Timestamp) ->
+   (vec AttendanceRecord) query;
+  getAttendanceByStudent: (token: text, studentId: StudentId) ->
+   (vec AttendanceRecord) query;
+  getAttendanceRateSummary: () -> (AttendanceRateSummary) query;
+  getAttendanceSummary: (token: text, studentId: StudentId) ->
+   (AttendanceSummary) query;
+  getEnrollmentByClass: () -> (vec EnrollmentByClass) query;
+  getFeesCollectionSummary: () -> (FeesCollectionSummary) query;
+  getMarksByStudent: (token: text, studentId: StudentId) -> (vec Mark) query;
+  getMarksBySubject: (token: text, subject: text) -> (vec Mark) query;
+  getStudent: (id: StudentId) -> (opt Student) query;
+  getSubmissions: (homeworkId: HomeworkId) -> (vec HomeworkSubmission) query;
+  getTeacher: (id: TeacherId) -> (opt Teacher) query;
+  getTotalStudents: () -> (nat) query;
+  getTotalTeachers: () -> (nat) query;
+  listAllFees: () -> (vec FeeRecord) query;
+  listFeesByStudent: (studentId: StudentId) -> (vec FeeRecord) query;
+  listHomeworkByClass: (classId: text) -> (vec Homework) query;
+  listNotices: (audience: opt Audience, classId: opt text) ->
+   (vec Notice) query;
+  listStudents: () -> (vec Student) query;
+  listTeachers: () -> (vec Teacher) query;
+  login: (username: text, password: text) -> (LoginResult);
+  logout: (token: text) -> ();
+  markAttendance: (token: text, input: MarkAttendanceInput) ->
+   (AttendanceRecord);
+  markFeePaid: (token: text, id: FeeId, paidDate: Timestamp) ->
+   (opt FeeRecord);
+  markSubmission: (token: text, homeworkId: HomeworkId, studentId:
+   StudentId) -> (HomeworkSubmission);
+  updateFeeRecord: (token: text, input: UpdateFeeInput) -> (opt FeeRecord);
+  updateMark: (token: text, input: UpdateMarkInput) -> (opt Mark);
+  updateStudent: (token: text, input: UpdateStudentInput) -> (opt Student);
+  updateTeacher: (token: text, input: UpdateTeacherInput) -> (opt Teacher);
+  validateSession: (token: text) -> (opt UserProfile) query;
+}

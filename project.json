@@ -1,0 +1,24 @@
+{
+  "overview": "A mobile-responsive School Management App serving three user roles — Admin, Teacher, and Student/Parent — through a single Internet Identity login with smart role detection. Centralizes student records, fees management, attendance, homework, marks, notices, and analytics in one platform.",
+  "features": [
+    "Role-based login (Admin / Teacher / Student) with Internet Identity",
+    "Admin Panel: student & teacher management, fees tracking, attendance, notices, analytics",
+    "Teacher Panel: homework management, marks entry, attendance marking, assigned class view",
+    "Student/Parent Panel: profile, marks with performance graph, fees status, attendance log, notices",
+    "Document upload for students with persistent file storage",
+    "PDF report cards and fee receipts",
+    "Mobile-first UI with bottom navigation and dashboard cards"
+  ],
+  "category": "productivity",
+  "tags": [
+    "school",
+    "education",
+    "management",
+    "admin",
+    "attendance",
+    "fees",
+    "homework",
+    "mobile"
+  ],
+  "last_updated": "2026-04-08T13:13:54.709Z"
+}
